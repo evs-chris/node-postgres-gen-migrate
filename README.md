@@ -30,11 +30,11 @@ The `new` command creates a new migration file. You can provide a name and optio
 
 ### `up [target]`
 
-The `up` command runs forward through migrations to the given target. If no target is given, all available migrations will be run. If the target is an integer `n`, `n` migrations forward will be run. If the target is a 14-digit timestamp, then the migrations will be run to nearest migration on or before the timestamp.
+The `up` command runs forward through migrations to the given target. If no target is given, all available migrations will be run. If the target is an integer `n`, `n` migrations forward will be run. If the target is a 14-digit timestamp, then the migrations will be run to nearest migration on or before the timestamp. The target may also be an ISO8601 timestamp (as used by the JS Date constructor).
 
 ### `down target`
 
-The `down` command runs backward through migrations including the given target, where the target is required. If the target is an integer `n`, then `n` migrations will be backed down. If the target is a 14-digit timestamp, then the migrations will be run backward to the nearest migration on or before the timestamp.
+The `down` command runs backward through migrations including the given target, where the target is required. If the target is an integer `n`, then `n` migrations will be backed down. If the target is a 14-digit timestamp, then the migrations will be run backward to the nearest migration on or before the timestamp. The target may also be an ISO8601 timestamp (as used by the JS Date constructor).
 
 ## Configuration
 
