@@ -1,0 +1,4 @@
+node_modules
+.gobble*
+build
+migrations

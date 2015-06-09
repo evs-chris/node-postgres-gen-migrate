@@ -1,0 +1,51 @@
+{
+  "name": "postgres-gen-migrate",
+  "version": "0.0.1",
+  "description": "A simple migration library built on postgres-gen and pg.",
+  "homepage": "https://github.com/evs-chris/node-postgres-gen-migrate",
+  "license": "MIT",
+  "author": {
+    "name": "Chris Reeves"
+  },
+  "main": "build/index.js",
+  "keywords": [
+    "postgres",
+    "postgresql",
+    "migration",
+    "migrate",
+    "generator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evs-chris/node-postgres-gen-migrate.git"
+  },
+  "files": [
+    "package.json",
+    "build/index.js",
+    "build/cli.js",
+    "LICENSE.md"
+  ],
+  "engines": {
+    "node": ">= 0.11.0"
+  },
+  "dependencies": {
+    "sander": "^0",
+    "yargs": "^3",
+    "flapjacks": "^0"
+  },
+  "peerDependencies": {
+    "postgres-gen": ">= 0.6.0"
+  },
+  "devDependencies": {
+    "gobble": "^0.10.2",
+    "gobble-babel": "^5.1.0",
+    "pg.js": "^4",
+    "postgres-gen": "^0"
+  },
+  "scripts": {
+    "build": "gobble build -p -f build && chmod +x build/cli.js"
+  },
+  "bin": {
+    "pgmigrate": "./build/cli.js"
+  }
+}
