@@ -123,7 +123,7 @@ module.exports = function(config) {
 
 function migrationBefore(date, list) {
   for (var i = 0; i < list.length; i++) {
-    if (list[i].date.getTime() >= date.getTime()) {
+    if (list[i].date.getTime() > date.getTime()) {
       break;
     }
   }
