@@ -8,6 +8,7 @@ var log = (function() {
   }
 })();
 var dateRE = /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})_(.+)/;
+var justDateRE = /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/;
 var babel = null, pggen;
 
 module.exports = function(config) {
@@ -62,9 +63,11 @@ module.exports = function(config) {
         }
         let m, start = 0, end = ms.length - 1;
 
+        if (typeof target === 'number' && target.toString().length > 4) target = `${target}`;
+
         // see what the target is
         if (target && (typeof target.getTime === 'function' || typeof target === 'string')) {
-          if (typeof target === 'string' && (m = dateRE.exec(target))) target = new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}`);
+          if (typeof target === 'string' && (m = justDateRE.exec(target))) target = new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}`);
           if (typeof target === 'string') {
             try { target = new Date(target); } catch (e) { config.log.error(`'${target}' is not a valid target.`); throw e; }
           }
@@ -77,7 +80,7 @@ module.exports = function(config) {
           } else {
             // going forward
             start = i;
-            end = migrationBefore(target, ms) + 1;
+            end = migrationBefore(target, ms);
           }
         } else if (typeof target === 'number') {
           start = i;

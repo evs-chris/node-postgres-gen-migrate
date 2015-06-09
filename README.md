@@ -34,7 +34,7 @@ The `up` command runs forward through migrations to the given target. If no targ
 
 ### `down target`
 
-The `down` command runs backward through migrations including the given target, where the target is required. If the target is an integer `n`, then `n` migrations will be backed down. If the target is a 14-digit timestamp, then the migrations will be run backward to the nearest migration on or after the timestamp.
+The `down` command runs backward through migrations including the given target, where the target is required. If the target is an integer `n`, then `n` migrations will be backed down. If the target is a 14-digit timestamp, then the migrations will be run backward to the nearest migration on or before the timestamp.
 
 ## Configuration
 
