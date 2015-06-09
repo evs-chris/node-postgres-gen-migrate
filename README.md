@@ -16,7 +16,7 @@ SQL migratins require a `.sql` extension to be identified as such.
 
 ### Script
 
-Script migrations are loaded as a function body in the context of a migration object. The function is expected to create an `up` and, optionally, a `down` generator and assign them to the context (`this`). Each migration method receives a transaction from [postgres-gen](https://github.com/evs-chris/node-postgres-gen), which gives them access to all of the handy helpers it provides. It is very important to yield each interaction with the database so that the transaction can commit or fail correctly.
+Script migrations are loaded as a function body in the context of a migration object with the current configuration (as `config`) as a parameter. The function is expected to create an `up` and, optionally, a `down` generator and assign them to the context (`this`). Each migration method receives a transaction from [postgres-gen](https://github.com/evs-chris/node-postgres-gen), which gives them access to all of the handy helpers it provides. It is very important to yield each interaction with the database so that the transaction can commit or fail correctly.
 
 Script migrations are the default. You can leave off the extension, use `.es6` to use babel transpilation, or use `.js` (or really anything else) for plain scripts.
 

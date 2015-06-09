@@ -53,7 +53,6 @@ module.exports = function(config) {
         let mig, i;
         for (i = 0; i < ms.length; i++) {
           if (ms[i].date.getTime() === v.getTime()) {
-            console.log('mig is ' + i);
             mig = ms[i]; break;
           }
         }
@@ -196,11 +195,11 @@ function apply(con, migration, config, back = false) {
         migration.down = true; // empty migration down is automagically ok
       }
     } else if (babel && (ext === '.es6' || config.es6 === true)) {
-      let fn = new Function(babel.transform(f, { blacklist: ['regenerator'] }));
-      fn.call(migration);
+      let fn = new Function('config', babel.transform(f, { blacklist: ['regenerator'] }));
+      fn.call(migration, config);
     } else {
-      let fn = new Function(f);
-      fn.call(migration);
+      let fn = new Function('config', f);
+      fn.call(migration, config);
     }
 
     if (back) {
