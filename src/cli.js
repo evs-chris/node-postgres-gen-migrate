@@ -44,11 +44,21 @@ function done() {
   process.exit(0);
 }
 
+var log = (function() {
+  try {
+    let res = require('blue-ox')('migration');
+    res.level('info');
+    return res;
+  } catch (e) {
+    return { error() { console.error.apply(console, arguments) }, warn() { console.warn.apply(console, arguments); }, info() { console.info.apply(console, arguments); } };
+  }
+})();
+
 var config = require('flapjacks').read();
 if (args.config) {
   let cfg = config.get(`migration.configuration.${args.config}`);
   if (!cfg) {
-    console.error(`The given configuration (${args.config}) does not exist.
+    log.error(`The given configuration (${args.config}) does not exist.
 Please create it in your configuration file at 'migration.configuration.${args.config}'.`);
     process.exit(1);
   }
@@ -103,7 +113,7 @@ this.down = function*(trans) {
 
   next.then(name => {
     return sander.writeFile(path.join(config.path, name), tpl);
-  }).then(done, err => { console.error(err); process.exit(1); });
+  }).then(done, err => { log.error(err); process.exit(1); });
 } else if (args._[0] === 'up' || args._[0] === 'down') {
   let target = args.target || args._[1] || null;
   if (target) {
@@ -112,5 +122,5 @@ this.down = function*(trans) {
     }
   }
   migrate = migrate(config);
-  migrate(target).then(done, err => { console.error(err); process.exit(1); });
+  migrate(target).then(() => { log.info('Migration complete!'); done(); }, err => { log.error(err); process.exit(1); });
 }

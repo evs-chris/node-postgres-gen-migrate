@@ -24,7 +24,7 @@ module.exports = function(config) {
       babel = require('babel-core');
     } catch (e) {
       babel = false;
-      config.log.warn('You requested ES6 in your config, but there is no babel module available. ES6 is disabled.');
+      if (config.es6) config.log.warn('You requested ES6 in your config, but there is no babel module available. ES6 is disabled.');
       config.es6 = false;
     }
   }
@@ -87,11 +87,6 @@ module.exports = function(config) {
           end = ms.length - 1;
         }
 
-        if (start === end) {
-          config.log.info('No eligible migrations found.');
-          return Promise.resolve(true);
-        }
-
         let list = [];
         if (start < end) {
           if (start < 0) start = 0;
@@ -103,8 +98,15 @@ module.exports = function(config) {
           if (end < -1) end = -1;
           if (start >= ms.length) start = ms.length - 1;
 
-          if (i < 0) return Promise.resolve(true); // nothing to roll back
+          if (i < 0) i = end; // nothing to roll back
           for (i = start; i > end; i--) list.push(ms[i]);
+        }
+
+        if (list.length === 0) {
+          config.log.info('No eligible migrations found.');
+          return Promise.resolve(true);
+        } else {
+          config.log.info(`Found ${list.length} eligible migrations.`);
         }
 
         // run 'em
@@ -205,6 +207,7 @@ function apply(con, migration, config, back = false) {
     if (back) {
       if (isGenerator(migration.down)) {
         return con.transaction(function*(trans) {
+          config.log.info(`Rolling ${migration.name} back...`);
           yield* migration.down(trans);
           yield trans.nonQuery(`update ${config.table} set version = ?`, migration.previous.toISOString().substr(0, 19));
         });
@@ -214,6 +217,7 @@ function apply(con, migration, config, back = false) {
     } else {
       if (isGenerator(migration.up)) {
         return con.transaction(function*(trans) {
+          config.log.info(`Running ${migration.name}...`);
           yield* migration.up(trans);
           yield trans.nonQuery(`update ${config.table} set version = ?`, migration.date.toISOString().substr(0, 19));
         });
